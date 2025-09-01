@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prendre rendez-vous</title>
+  <link rel="stylesheet" href="./style.css?v=2" />
+  <link rel="icon" href="./Logo/favicon.png" type="image/png" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header>
+    <nav class="navbar">
+      <div class="logo">
+        <img src="./Logo/Logo.png" alt="Logo Maître Diakité" />
+      </div>
+      <ul class="nav-links">
+        <li><a href="./Acceuil.html">Accueil</a></li>
+        <li><a href="./Apropos.html">À propos</a></li>
+        <li><a href="./Expertises.html">Expertises</a></li>
+        <li><a href="./Affaires.html">Affaires</a></li>
+        <li><a class="active" href="./Rendez-vous.html">Rendez-vous</a></li>
+        <li><a href="./Contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- CONTENU PRINCIPAL -->
+  <main class="rdv-container">
+    <h1>Prendre rendez-vous avec Maître Diakité</h1>
+    <p class="intro">
+      Merci de remplir le formulaire ci-dessous pour demander un rendez-vous. Nous reviendrons vers vous rapidement pour confirmer la date et l'heure.
+    </p>
+
+    <!-- Formulaire branché Firestore -->
+    <form id="rdv-form" class="rdv-form" autocomplete="on">
+      <h1>Prendre rendez-vous avec Maître Diakité</h1>
+      <p class="intro">Merci de remplir le formulaire ci-dessous. Vous pouvez joindre des documents utiles (PDF, images).</p>
+
+      <label for="fullName">Nom et prénom *</label>
+      <input type="text" id="fullName" name="fullName" required />
+
+      <label for="email">Email *</label>
+      <input type="email" id="email" name="email" required />
+
+      <label for="phone">Téléphone *</label>
+      <input type="tel" id="phone" name="phone" required />
+
+      <label for="subject">Objet *</label>
+      <input type="text" id="subject" name="subject" required />
+
+      <div class="row">
+        <div>
+          <label for="date">Date souhaitée *</label>
+          <input type="date" id="date" name="date" required />
+        </div>
+        <div>
+          <label for="time">Heure souhaitée *</label>
+          <input type="time" id="time" name="time" required />
+        </div>
+      </div>
+
+      <label for="meetingType">Type de rendez-vous *</label>
+      <select id="meetingType" name="meetingType" required>
+        <option value="" selected disabled>— Choisir —</option>
+        <option value="in_person">Présentiel au cabinet</option>
+        <option value="zoom">En visio (Zoom)</option>
+      </select>
+
+      <div id="zoom-extra" style="display:none; margin-top:10px;">
+        <label for="timezone">Votre fuseau horaire (optionnel)</label>
+        <input type="text" id="timezone" name="timezone" placeholder="Ex: Europe/Paris" />
+      </div>
+
+      <label for="message">Motif / Contexte *</label>
+      <textarea id="message" name="message" rows="4" placeholder="Décrivez brièvement votre demande" required></textarea>
+
+      <label for="files">Documents (PDF / images, max 10 Mo chacun)</label>
+      <input type="file" id="files" name="files" multiple accept=".pdf,image/*" />
+
+      <!-- anti-spam -->
+      <input type="text" id="website" name="website" style="display:none" tabindex="-1" autocomplete="off" />
+
+      <button id="rdv-submit" type="submit" class="btn-blue">Envoyer la demande</button>
+      <p id="rdv-feedback" class="feedback" hidden></p>
+      <p id="rdv-progress" class="feedback" hidden></p>
+    </form>
+
+
+    <section class="contact-info">
+      <h2>Coordonnées et horaires d’ouverture</h2>
+      <p><strong>Adresse :</strong> --- </p>
+      <p><strong>Téléphone :</strong> --- </p>
+      <p><strong>Email :</strong> --- </p>
+      <p><strong>Horaires d’ouverture :</strong> --- </p>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-container">
+      <p>&copy; 2025 Maître Modibo Diakité. Tous droits réservés.</p>
+      <p>Conçu par Yaye Malon Traoré</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const sel = document.getElementById("meetingType");
+      const extra = document.getElementById("zoom-extra");
+      sel?.addEventListener("change", () => {
+        extra.style.display = sel.value === "zoom" ? "block" : "none";
+      });
+    });
+  </script>
+ 
+  <script type="module" src="./Js/main.js?v=3"></script>
+  <script type="module" src="./Js/rendezvous.js?v=3"></script>
+
+</body>
+</html>
