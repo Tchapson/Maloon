@@ -161,7 +161,6 @@ footer {
 
 /* ===== ACCUEIL : HERO SECTION ===== */
 .hero {
-    background: url('./Image/hero-bg.jpg') center/cover no-repeat;
     height: 80vh;
     display: flex;
     align-items: center;
@@ -337,7 +336,7 @@ main section {
 }
   
 .bio-image .image-placeholder {
-    background-color: #ddd;
+    background-color: white;
     height: 300px;
     border-radius: 10px;
     display: flex;
@@ -345,6 +344,13 @@ main section {
     align-items: center;
     font-style: italic;
     color: #666;
+}
+
+.bio-image .image-placeholder img {
+    max-width: 90%;   /* l’image prendra au max 90% de la largeur dispo */
+    max-height: 90%;  /* idem pour la hauteur */
+    object-fit: contain; /* garde les proportions sans déformation */
+    border-radius: 10px;
 }
   
 /* Liste de parcours */
@@ -734,11 +740,6 @@ main section {
     flex: 1 1 400px;
     overflow: hidden;
   }
-  
-
-  
-
- 
 
 /* ---- Mobile d'abord: petits écrans (≤ 480px) ---- */
 @media (max-width: 480px) {
