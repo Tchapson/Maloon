@@ -66,6 +66,7 @@ form?.addEventListener("submit", async (e) => {
 
   try {
     submitBtn?.setAttribute("disabled", "true");
+    submitBtn?.setAttribute("data-loading", "1");   
     submitBtn.textContent = "Envoi…";
     showProgress("Création du rendez-vous…");
     console.log("Payload RDV →", JSON.stringify({
@@ -167,6 +168,7 @@ form?.addEventListener("submit", async (e) => {
     showMsg("Erreur d’envoi. Veuillez réessayer plus tard.", false);
   } finally {
     submitBtn?.removeAttribute("disabled");
+    submitBtn?.removeAttribute("data-loading");     
     submitBtn.textContent = "Envoyer la demande";
   }
 });

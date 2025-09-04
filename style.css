@@ -51,8 +51,8 @@
 
 /* ===== CONTENU PRINCIPAL ===== */
 main {
-    padding-top: 60px;
-    flex: 1;
+  padding-top: calc(var(--nav-h, 72px) + 16px); /* 16px d’air sous la barre */
+  flex: 1;
 }
 
 html, body {
@@ -873,3 +873,4 @@ section h3 { font-size: clamp(18px, 2.5vw, 24px); margin: 0.5rem 0 0.5rem; }
 
 /* Option : reset général pour éviter les surprises */
 h1, h2, h3 { line-height: 1.2; font-weight: 700; }
+

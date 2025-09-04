@@ -1,20 +1,250 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>À propos de Maître Diakité</title>
-  <link rel="stylesheet" href="./style.css?v=2">
-  <link rel="icon" href="./Logo/Etdue_Rokiatou.png" type="image/png" />
+  <link rel="stylesheet" href="./style.css?v=2"/>
+  <link rel="icon" href="./Logo/Etdue_Rokiatou.png" type="image/png"/>
+
+  <!-- Styles locaux : organisation & finitions de la page -->
+  <style>
+    /* Fond subtil et décalage sous navbar (utilise --nav-h si script présent) */
+    html, body{
+      background: linear-gradient(135deg, #f9fafb, #eef2ff 40%, #e6ebff);
+      background-attachment: fixed;
+    }
+    main{ padding-top: calc(var(--nav-h, 72px) + 16px); }
+
+    /* Bandeau d’intro */
+    .page-hero{
+      max-width: 1100px; margin: 0 auto 18px; padding: 18px 20px;
+      background: linear-gradient(90deg, rgba(26,35,126,.08), rgba(103,114,229,.06));
+      border: 1px solid rgba(103,114,229,.16);
+      border-radius: 14px; box-shadow: 0 10px 26px rgba(0,0,0,.06);
+    }
+    .page-hero h1{ margin:0 0 6px; color:#1A237E; letter-spacing:.2px; }
+    .page-hero p{ margin:0; color:#6B7280; }
+
+    /* Split bio (texte / image) dans une carte propre */
+    .split-card{
+      max-width: 1100px; margin: 14px auto 24px; padding: 22px;
+      background:#fff; border:1px solid rgba(0,0,0,.06);
+      border-radius:16px; box-shadow:0 14px 34px rgba(0,0,0,.08);
+      display:grid; grid-template-columns: 1.15fr .9fr; gap: 26px;
+    }
+    @media (max-width: 900px){ .split-card{ grid-template-columns: 1fr; } }
+
+    .split-card .title{ margin:0 0 10px; color:#1A237E; }
+    .split-card .lead{ margin:0; color:#4B5563; line-height:1.7; text-align:justify; }
+
+    .portrait{
+      background:#fff; border:1px solid rgba(0,0,0,.06);
+      border-radius:14px; overflow:hidden;
+      box-shadow:0 10px 28px rgba(0,0,0,.06); min-height:300px;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .portrait img{ width:100%; height:100%; object-fit:cover; }
+
+    /* Repères clés (faits saillants) */
+    .facts{
+      max-width: 1100px; margin: 0 auto 18px; padding: 0 20px;
+    }
+    .facts-grid{
+      display:grid; gap:14px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+    .fact{
+      background:#fff; border:1px solid rgba(0,0,0,.06); border-left:6px solid #CBA135;
+      border-radius:12px; padding:14px 16px; box-shadow:0 10px 22px rgba(0,0,0,.06);
+    }
+    .fact h3{ margin:0 0 6px; font-size:1rem; color:#1A237E; }
+    .fact p{ margin:0; color:#374151; font-size:.98rem; }
+
+    /* Timeline Parcours (remplace <ul> simple) */
+    .section-wrap{ max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+    .section-wrap h2{
+      color:#1A237E; border-left:6px solid #CBA135; padding-left:10px; margin: 22px 0 10px;
+    }
+    .timeline{
+      list-style:none; padding-left:0; margin: 10px 0 0; position:relative;
+    }
+    .timeline::before{
+      content:""; position:absolute; left: 10px; top:0; bottom:0;
+      width:2px; background: linear-gradient(#CBA135, #3949AB); opacity:.4;
+    }
+    .timeline li{
+      position:relative; padding-left:32px; margin:16px 0;
+      color:#374151; line-height:1.65; text-align:justify;
+    }
+    .timeline li::before{
+      content:""; position:absolute; left:4px; top:.45em;
+      width:12px; height:12px; border-radius:50%;
+      background: linear-gradient(90deg, #CBA135, #3949AB);
+      box-shadow:0 0 0 3px rgba(103,114,229,.15);
+    }
+
+    /* Highlight + convictions : cartes */
+    .highlight-section .container,
+    .convictions .container{
+      background:#fff; border:1px solid rgba(0,0,0,.06);
+      border-radius:14px; box-shadow:0 10px 28px rgba(0,0,0,.06);
+      padding: 22px;
+    }
+    .highlight-section{ background: linear-gradient(180deg, #EEF2FF, #E8F0FE); }
+    .highlight-section h2{ color:#3949AB; }
+    .highlight-section p{ color:#374151; text-align:justify; }
+
+    .convictions blockquote{
+      font-style:italic; color:#1A237E; text-align:center;
+      font-size: clamp(18px, 2.6vw, 22px); margin:0 0 12px;
+    }
+    .convictions p{ color:#374151; line-height:1.7; text-align:justify; margin:0; }
+
+    /* Lien actif navbar */
+    .nav-links a.active{ position:relative; color:#DDE1FF; }
+    .nav-links a.active::after{
+      content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px;
+      background: linear-gradient(90deg, #CBA135, #3949AB); border-radius:2px;
+    }
+    
+    /* ===== Bio hero (fusion texte + photo) ===== */
+    .bio-hero{
+      max-width: 1100px;
+      margin: 14px auto 26px;
+      padding: 0;
+      display: grid;
+      grid-template-columns: 1.15fr .95fr;
+      gap: 24px;
+      align-items: stretch;
+
+      /* carte globale très subtile */
+      border-radius: 16px;
+    }
+    @media (max-width: 980px){
+      .bio-hero{ grid-template-columns: 1fr; }
+    }
+
+    /* Colonne gauche (texte) */
+    .bio-col.left{
+      background: #fff;
+      border: 1px solid rgba(0,0,0,.06);
+      border-radius: 16px;
+      box-shadow: 0 14px 34px rgba(0,0,0,.08);
+      padding: 24px 24px 22px;
+    }
+
+    .bio-title{
+      margin: 10px 0 6px;
+      color: #1A237E;
+      font-size: clamp(22px, 2.4vw, 28px);
+      letter-spacing: .2px;
+    }
+    .bio-lead{
+      margin: 0 0 12px;
+      color: #4B5563;
+      line-height: 1.7;
+      text-align: justify;
+    }
+
+    /* Puces courtes et lisibles */
+    .bio-points{
+      margin: 10px 0 16px;
+      padding-left: 0;
+      list-style: none;
+    }
+    .bio-points li{
+      position: relative;
+      padding-left: 26px;
+      margin: 8px 0;
+      color: #374151;
+      line-height: 1.6;
+      text-align: justify;
+    }
+    .bio-points li::before{
+      content:"";
+      position:absolute; left: 6px; top: .65em;
+      width: 8px; height: 8px; border-radius: 50%;
+      background: linear-gradient(90deg, #CBA135, #3949AB);
+      opacity: .9;
+    }
+
+    /* Chips sous le titre */
+    .chip{
+      display: inline-block;
+      margin: 0 8px 8px 0;
+      padding: 6px 10px;
+      font-size: .88rem;
+      border-radius: 999px;
+      background: #F3F4FF;
+      color: #1A237E;
+      border: 1px solid rgba(103,114,229,.25);
+    }
+
+    /* CTAs */
+    .bio-cta{ display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn-primary, .btn-ghost{
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 10px 14px; border-radius: 10px; text-decoration: none; font-weight: 700;
+      transition: transform .06s ease, box-shadow .16s ease, background .16s ease;
+    }
+    .btn-primary{
+      background: #3949AB; color: #fff;
+      box-shadow: 0 10px 22px rgba(57,73,171,.22);
+    }
+    .btn-primary:hover{ transform: translateY(-1px); background:#283593; }
+    .btn-ghost{
+      background: #fff; color:#1A237E; border: 1px solid rgba(0,0,0,.08);
+    }
+    .btn-ghost:hover{ transform: translateY(-1px); box-shadow: 0 10px 22px rgba(0,0,0,.06); }
+
+    /* Colonne droite (photo) */
+    .bio-col.right{
+      position: relative;
+      overflow: hidden;
+      border-radius: 16px;
+      border: 1px solid rgba(0,0,0,.06);
+      box-shadow: 0 14px 34px rgba(0,0,0,.08);
+      background: linear-gradient(180deg, #eef2ff, #e9edff);
+      display: grid;
+      grid-template-rows: 1fr auto;
+    }
+    .bio-col.right img{
+      width: 100%; height: 100%; object-fit: cover;
+      filter: saturate(1.02) contrast(1.02);
+    }
+    .bio-col.right figcaption{
+      padding: 10px 14px;
+      font-size: .95rem; color: #334155;
+      background: rgba(255,255,255,.85);
+      border-top: 1px solid rgba(0,0,0,.06);
+    }
+
+    /* Ruban (badge) sur la photo */
+    .bio-col.right .ribbon{
+      position: absolute;
+      top: 14px; left: -28px;
+      background: linear-gradient(90deg, #CBA135, #E4C878);
+      color: #1A237E;
+      font-weight: 800;
+      padding: 8px 28px;
+      transform: rotate(-12deg);
+      box-shadow: 0 10px 22px rgba(203,161,53,.25);
+      border: 1px solid rgba(0,0,0,.06);
+      letter-spacing: .4px;
+    }
+
+    /* Petite respiration sous la section suivante */
+    .facts{ margin-top: 6px; }
+
+  </style>
 </head>
 
 <body>
-
   <!-- NAVBAR -->
   <header>
     <nav class="navbar">
       <div class="logo">
-        <img src="./Logo/Logo.png" alt="Logo Maître Diakité"/> 
+        <img src="./Logo/Logo.png" alt="Logo Maître Diakité"/>
       </div>
       <ul class="nav-links">
         <li><a href="Acceuil.html">Accueil</a></li>
@@ -29,58 +259,109 @@
 
   <!-- CONTENU PRINCIPAL -->
   <main>
-    <!-- SECTION HERO SPLIT -->
-    <section class="bio-section">
-      <div class="bio-container">
-        <div class="bio-text">
-          <h1>Maître Modibo Diakité</h1>
-          <p class="intro">
-            Avocat au Barreau du Mali depuis 1998, ancien magistrat et expert en droit international, Maître Diakité est une figure majeure du monde judiciaire malien. Fort de plus de 40 ans d'expérience, il défend avec rigueur et intégrité les principes fondamentaux de l'État de droit.
-          </p>
+    <!-- 1) Bandeau -->
+    <section class="page-hero">
+      <h1>Maître Modibo Diakité</h1>
+      <p>Avocat au Barreau du Mali – Ancien magistrat – Expert en droit international</p>
+    </section>
+
+    <!-- 2) Bio hero compact & dense -->
+    <section class="bio-hero">
+      <div class="bio-col left">
+        <span class="chip">Avocat au Barreau du Mali</span>
+        <span class="chip">Ancien magistrat</span>
+        <span class="chip">Droit pénal militaire</span>
+
+        <h2 class="bio-title">À propos de Maître Modibo Diakité</h2>
+        <p class="bio-lead">
+          Fort de plus de 40 ans d’expérience, Maître Diakité défend avec rigueur et humanité
+          les principes de l’État de droit. Son parcours réunit magistrature, conseil ministériel
+          et contentieux sensibles au Mali et à l’international.
+        </p>
+
+        <ul class="bio-points">
+          <li><strong>40+ ans</strong> de pratique (magistrature & avocature)</li>
+          <li><strong>Portée internationale</strong> — dossiers transfrontaliers (Genève)</li>
+          <li><strong>Justice militaire</strong> — missions de mise en place & formation</li>
+          <li><strong>Engagements</strong> — ASF France, droit pénal militaire</li>
+        </ul>
+
+        <div class="bio-cta">
+          <a href="Rendez-vous.html" class="btn-primary">Prendre rendez-vous</a>
+          <a href="Expertises.html" class="btn-ghost">Voir les expertises</a>
         </div>
-        <div class="bio-image">
-          <div class="image-placeholder">
-            <img src="Image/Modibo Diakite.jpg" alt="Photo professionnelle de Maître Diakité" >
-          </div>
-        </div>
+      </div>
+
+      <figure class="bio-col right">
+        <!-- Astuce: idéalement renommer en "Modibo-Diakite.jpg" (sans espace) -->
+        <img src="Image/Modibo Diakite.jpg" alt="Photo de Maître Modibo Diakité" />
+        <figcaption>
+          « La justice au service du peuple, guidée par l’intégrité »
+        </figcaption>
+        <span class="ribbon">40+ ans</span>
+      </figure>
+    </section>
+
+    <!-- 3) Repères clés -->
+    <section class="facts">
+      <div class="facts-grid">
+        <article class="fact">
+          <h3>+40 ans d’expérience</h3>
+          <p>Magistrature, conseil ministériel, justice militaire et avocature.</p>
+        </article>
+        <article class="fact">
+          <h3>Portée internationale</h3>
+          <p>Interventions et contentieux transfrontaliers (ex. Genève).</p>
+        </article>
+        <article class="fact">
+          <h3>Réformes & enseignement</h3>
+          <p>Formations (Police, Gendarmerie, EMIA) et chantiers institutionnels.</p>
+        </article>
+        <article class="fact">
+          <h3>Engagements</h3>
+          <p>Avocats Sans Frontières, droit pénal militaire, libertés fondamentales.</p>
+        </article>
       </div>
     </section>
 
-    <!-- PARCOURS -->
-    <section class="container">
+    <!-- 4) Parcours (timeline) -->
+    <section class="section-wrap">
       <h2>Parcours et diplômes</h2>
-      <ul>
-        <li>Diplômé de l'École Nationale d'Administration du Mali (ENA) - Section Sciences Juridiques</li>
-        <li>Nommé magistrat en 1977 et détaché auprès de l’intendance militaire au ministère de la Défense</li>
-        <li>Sous-directeur des études du contentieux et des pensions militaires à l’intendance militaire</li>
-        <li>Chef du personnel civil des armées</li>
-        <li>Conseiller technique auprès de 4 ministres de la Défense et des Anciens Combattants</li>
-        <li>Supstitue du procureur de la république auprès du tribunal de grande instance de la commune III de bamako </li>
-        <li>Chargé de mission auprès du ministre de la Défense pour la mise en œuvre de la justice militaire au Mali</li>
-        <li>Administrateur des Aéroports du Mali et de la Caisse de Retraite</li>
-        <li>Ancien formateur dans les écoles de police, les gendarmeries et à l’EMIA de Koulikoro</li>
-        <li>Vice-président du Conseil supérieur de la Communication au Mali pendant 6 ans</li> 
+      <ul class="timeline">
+        <li>Diplômé de l'École Nationale d'Administration du Mali (ENA) – Section Sciences Juridiques.</li>
+        <li>Nommé magistrat en 1977 et détaché auprès de l’intendance militaire au ministère de la Défense.</li>
+        <li>Sous-directeur des études du contentieux et des pensions militaires à l’intendance militaire.</li>
+        <li>Chef du personnel civil des armées.</li>
+        <li>Conseiller technique auprès de 4 ministres de la Défense et des Anciens Combattants.</li>
+        <li>Substitut du procureur près le Tribunal de grande instance de la commune III de Bamako.</li>
+        <li>Chargé de mission pour la mise en œuvre de la justice militaire au Mali.</li>
+        <li>Administrateur des Aéroports du Mali et de la Caisse de Retraite.</li>
+        <li>Ancien formateur (écoles de police, gendarmeries, EMIA de Koulikoro).</li>
+        <li>Vice-président du Conseil supérieur de la Communication au Mali (6 ans).</li>
       </ul>
     </section>
 
-    <!-- MISSIONS -->
+    <!-- 5) Missions -->
     <section class="highlight-section">
       <div class="container">
         <h2>Engagements & Missions internationales</h2>
         <p>
-          Membre actif d'Avocats Sans Frontières France et de la Société Internationale de Droit Pénal Militaire, Maître Diakité a participé à d’importantes réformes judiciaires, conférences internationales et à la mise en place de la justice militaire au Mali.
+          Membre actif d'Avocats Sans Frontières France et de la Société Internationale de Droit Pénal Militaire,
+          Maître Diakité a participé à d’importantes réformes judiciaires, conférences internationales et à la
+          mise en place de la justice militaire au Mali.
         </p>
       </div>
     </section>
 
-    <!-- CONVICTIONS -->
+    <!-- 6) Convictions -->
     <section class="convictions">
       <div class="container">
         <blockquote>
-          "La foi en Dieu, la reconnaissance et l’amour infini pour mon père et ma mère."
+          « La foi en Dieu, la reconnaissance et l’amour infini pour mon père et ma mère. »
         </blockquote>
         <p>
-          Guidé par des valeurs d'intégrité, d’excellence et de loyauté, Maître Diakité œuvre pour une justice au service du peuple malien et un Mali prospère, fondé sur l’État de droit.
+          Guidé par des valeurs d'intégrité, d’excellence et de loyauté, Maître Diakité œuvre pour une justice au
+          service du peuple malien et un Mali prospère, fondé sur l’État de droit.
         </p>
       </div>
     </section>
@@ -93,6 +374,20 @@
     </div>
   </footer>
 
-  <script type="module" src="./Js/main.js"></script>  
+  <!-- Optionnel : calcule la hauteur réelle de la navbar pour --nav-h -->
+  <script>
+    (function() {
+      const nav = document.querySelector('.navbar');
+      if (!nav) return;
+      function setOffset() {
+        const h = nav.offsetHeight;
+        document.documentElement.style.setProperty('--nav-h', h + 'px');
+      }
+      setOffset();
+      window.addEventListener('resize', setOffset);
+    })();
+  </script>
+
+  <script type="module" src="./Js/main.js"></script>
 </body>
 </html>

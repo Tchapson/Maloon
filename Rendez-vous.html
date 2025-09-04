@@ -6,6 +6,184 @@
   <title>Prendre rendez-vous</title>
   <link rel="stylesheet" href="./style.css?v=2" />
   <link rel="icon" href="./Logo/Etdue_Rokiatou.png" type="image/png" />
+  <style>
+    /* ====== Rehausse rapide du design RDV (local à cette page) ====== */
+
+    :root{
+      --text:#1F2937; --muted:#6B7280;
+      --primary:#3949AB; --primary-dark:#283593;
+      --brand:#1A237E; --accent:#CBA135;
+      --ring:rgba(57,73,171,.35);
+      --ok:#14804A; --err:#B00020;
+      --card:#fff; --bg:#FAFAF8;
+      --shadow:0 12px 28px rgba(0,0,0,.08);
+    }
+
+    /* Enlève les <br> de compensation : on gère l'espace via CSS */
+    body{ background: var(--bg); color: var(--text); }
+    main.rdv-container{ margin-top: 92px; } /* compense la navbar fixe proprement */
+
+    /* Carte formulaire plus premium */
+    .rdv-container{
+      border:1px solid rgba(0,0,0,.06);
+      border-radius: 14px;
+      background: linear-gradient(180deg, #ffffff, #fcfcff);
+      box-shadow: var(--shadow);
+      padding: 34px 26px;
+    }
+    .rdv-container h1{ color: var(--brand); margin-top: 0; }
+    .rdv-container .intro{ color: var(--muted); }
+
+    /* Grille date/heure */
+    .rdv-form .row{
+      display:grid; grid-template-columns: 1fr 1fr; gap:16px;
+    }
+    @media (max-width: 640px){ .rdv-form .row{ grid-template-columns: 1fr; } }
+
+    /* Labels + champs */
+    .rdv-form label{
+      display:block; margin:18px 0 6px; font-weight:600; color:var(--text);
+    }
+    .rdv-form input[type="text"],
+    .rdv-form input[type="email"],
+    .rdv-form input[type="tel"],
+    .rdv-form input[type="date"],
+    .rdv-form input[type="time"],
+    .rdv-form select,
+    .rdv-form textarea{
+      width:100%; padding:12px 14px; font-size:16px;
+      border:1px solid #D1D5DB; border-radius:10px; background:#fff; color:var(--text);
+      transition: border-color .16s ease, box-shadow .16s ease, background .16s ease;
+    }
+    .rdv-form textarea{ min-height:120px; resize:vertical; }
+    .rdv-form input::placeholder, .rdv-form textarea::placeholder{ color:#9CA3AF; }
+    .rdv-form input:focus,
+    .rdv-form select:focus,
+    .rdv-form textarea:focus{
+      outline:none; border-color:var(--primary);
+      box-shadow:0 0 0 4px var(--ring);
+      background:#fff;
+    }
+
+    /* Champ fichiers */
+    .rdv-form input[type="file"]{
+      padding:12px; border:1px dashed #C7CCE2; border-radius:12px;
+      background:#F7F8FF;
+    }
+    .rdv-form input[type="file"]:hover{ background:#F1F3FF; }
+
+    /* Bouton principal + spinner */
+    .btn-blue{
+      display:inline-flex; align-items:center; justify-content:center; gap:.6rem;
+      width:100%; padding:12px 18px; font-weight:700; letter-spacing:.2px;
+      background:var(--primary); color:#fff; border-radius:12px; border:0;
+      box-shadow:0 10px 22px rgba(57,73,171,.25);
+      transition: transform .06s ease, background .16s ease, box-shadow .16s ease;
+    }
+    .btn-blue:hover{ background:var(--primary-dark); transform: translateY(-1px); }
+    .btn-blue:disabled{ opacity:.9; cursor:not-allowed; filter:saturate(.7); }
+    .btn-blue[data-loading="1"]::after{
+      content:""; width:16px; height:16px; border-radius:50%;
+      border:2px solid rgba(255,255,255,.55); border-top-color:#fff;
+      animation: rdvspin .8s linear infinite;
+    }
+    @keyframes rdvspin { to { transform: rotate(360deg); } }
+
+    /* Feedback / Progress jolis */
+    .feedback{
+      margin-top:12px; padding:10px 12px; border-radius:10px;
+      background:#F9FAFB; border:1px solid #E5E7EB; color:var(--text);
+    }
+    #rdv-feedback.ok{ background:#ECFDF5; border-color:#A7F3D0; color:var(--ok); }
+    #rdv-feedback.err{ background:#FEF2F2; border-color:#FECACA; color:var(--err); }
+    #rdv-progress{ color:var(--muted); }
+
+    /* Info contact en encart */
+    .contact-info{
+      background: linear-gradient(180deg, #EEF2FF, #E8F0FE);
+      border:1px solid #DDE3FF; color:#223; border-radius:12px;
+    }
+    .contact-info h2{ color: var(--primary); }
+
+    /* Lien actif navbar : petite barre élégante */
+    .nav-links a.active{
+      position:relative; color:#DDE1FF;
+    }
+    .nav-links a.active::after{
+      content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px;
+      background: linear-gradient(90deg, var(--accent), var(--primary));
+      border-radius:2px;
+    }
+
+    .btn-blue[data-loading="1"]::after{
+      content:""; width:16px; height:16px; border-radius:50%;
+      border:2px solid rgba(255,255,255,.55); border-top-color:#fff;
+      animation: rdvspin .8s linear infinite;
+    }
+    
+    /* ===== Fond global élégant ===== */
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: linear-gradient(135deg, #f9fafb, #eef2ff, #e0e7ff);
+      background-attachment: fixed;
+      font-family: system-ui, sans-serif;
+    }
+
+    /* ===== Dropzone élégante ===== */
+    .file-section { margin-top: 18px; }
+    .dropzone{
+      position: relative;
+      display: grid;
+      justify-items: center;
+      gap: 8px;
+      padding: 20px 16px;
+      border: 1.5px dashed #C7CCE2;
+      border-radius: 14px;
+      background: #F7F8FF;
+      transition: border-color .16s ease, background .16s ease, box-shadow .16s ease;
+    }
+    .dropzone:hover{ background:#F1F3FF; }
+    .dropzone:focus{ outline: none; box-shadow: 0 0 0 4px var(--ring); border-color: var(--primary); }
+    .dropzone.is-dragover{
+      border-color: var(--primary);
+      background: #EEF2FF;
+      box-shadow: 0 0 0 4px var(--ring);
+    }
+    .dz-ico{ color: var(--primary); opacity:.9; }
+    .dz-text{ margin: 0; text-align:center; color: var(--muted); }
+    .dz-text span{ color: var(--primary); font-weight:700; }
+    .dz-help{ margin: 4px 0 0; font-size: .92rem; color: #6b7280; }
+
+    /* Bouton secondaire (par rapport à .btn-blue) */
+    .btn-secondary{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding: 9px 14px; border-radius: 10px; border:1px solid #D1D5DB;
+      background:#fff; color:#111827; font-weight:600; cursor:pointer;
+      transition: background .16s ease, border-color .16s ease, transform .06s ease;
+    }
+    .btn-secondary:hover{ background:#F9FAFB; border-color:#C7CAD1; transform: translateY(-1px); }
+
+    /* Liste des fichiers sélectionnés (chips) */
+    .file-list{
+      list-style:none; margin:10px 0 0; padding:0;
+      display:flex; flex-wrap:wrap; gap:8px;
+    }
+    .file-chip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px; border-radius: 999px;
+      background:#EEF2FF; border:1px solid #DDE3FF; color:#1f2937; font-size:.92rem;
+    }
+    .file-chip .size{ color:#6b7280; font-size:.85rem; }
+    .file-chip .remove{
+      appearance:none; border:0; background:transparent; cursor:pointer;
+      font-size:16px; line-height:1; color:#6b7280;
+    }
+    .file-chip .remove:hover{ color:#B00020; }
+
+
+  </style>
+
 </head>
 <body>
 
@@ -25,7 +203,6 @@
       </ul>
     </nav>
   </header>
-  <br/><br/><br/><br/>
   <!-- CONTENU PRINCIPAL -->
   <main class="rdv-container">
     <h1>Prendre rendez-vous avec Maître Diakité</h1>
@@ -74,8 +251,29 @@
       <label for="message">Motif / Contexte *</label>
       <textarea id="message" name="message" rows="4" placeholder="Décrivez brièvement votre demande" required></textarea>
 
-      <label for="files">Documents (PDF / images, max 10 Mo chacun)</label>
-      <input type="file" id="files" name="files" multiple accept=".pdf,image/*" />
+      <div class="file-section">
+        <label>Documents (PDF / images)</label>
+
+        <div id="dropzone" class="dropzone" tabindex="0" aria-label="Zone de dépôt pour vos documents">
+          <div class="dz-ico" aria-hidden="true">
+            <!-- petit icône trombone en SVG -->
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+              <path d="M21.44 11.05l-8.49 8.49a6 6 0 01-8.49-8.49l8.49-8.49a4 4 0 115.66 5.66l-8.49 8.49a2 2 0 11-2.83-2.83l7.78-7.78" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <p class="dz-text">
+            Glissez-déposez vos fichiers ici <br><span>ou</span>
+          </p>
+          <button type="button" class="btn-secondary" id="dz-browse">Choisir des fichiers</button>
+
+          <!-- L’input réel (caché) que ton JS utilise déjà -->
+          <input type="file" id="files" name="files" multiple accept=".pdf,image/*" hidden />
+          <p class="dz-help">Formats : PDF, JPG, PNG. Limites : <strong>10&nbsp;Mo/fichier</strong>, <strong>~20&nbsp;Mo au total</strong>.</p>
+        </div>
+
+        <ul id="file-list" class="file-list" aria-live="polite"></ul>
+      </div>
+
 
       <!-- anti-spam -->
       <input type="text" id="website" name="website" style="display:none" tabindex="-1" autocomplete="off" />
@@ -115,6 +313,111 @@
  
   <script type="module" src="./Js/main.js?v=3"></script>
   <script type="module" src="./Js/rendezvous.js?v=3"></script>
+  <script>
+    (function(){
+      const dz = document.getElementById('dropzone');
+      const input = document.getElementById('files');
+      const browseBtn = document.getElementById('dz-browse');
+      const list = document.getElementById('file-list');
+
+      // Limites côté UI (doivent rester cohérentes avec ton JS d’envoi)
+      const MAX_PER_FILE = 10 * 1024 * 1024; // 10 Mo
+      const MAX_TOTAL    = 20 * 1024 * 1024; // ~20 Mo cumulés
+
+      function formatSize(bytes){
+        if (bytes < 1024) return bytes + ' o';
+        if (bytes < 1024*1024) return (bytes/1024).toFixed(1) + ' Ko';
+        return (bytes/1024/1024).toFixed(1) + ' Mo';
+      }
+
+      function renderList(files){
+        list.innerHTML = '';
+        Array.from(files).forEach((f, idx) => {
+          const li = document.createElement('li');
+          li.className = 'file-chip';
+          li.innerHTML = `
+            <span class="name" title="${f.name}">${f.name}</span>
+            <span class="size">(${formatSize(f.size)})</span>
+            <button type="button" class="remove" aria-label="Retirer ${f.name}" data-index="${idx}">×</button>
+          `;
+          list.appendChild(li);
+        });
+      }
+
+      function validateAndSet(files){
+        // Filtre: types et poids
+        const accepted = [];
+        let total = 0;
+        for (const f of files){
+          const okType = f.type.startsWith('image/') || f.type === 'application/pdf';
+          const okSize = f.size <= MAX_PER_FILE;
+          if (!okType || !okSize) continue;
+          if (total + f.size > MAX_TOTAL) break;
+          accepted.push(f);
+          total += f.size;
+        }
+        // Met à jour l'input #files avec DataTransfer
+        const dt = new DataTransfer();
+        accepted.forEach(f => dt.items.add(f));
+        input.files = dt.files;
+        renderList(input.files);
+        // Avertissements discrets
+        if (files.length && accepted.length < files.length){
+          const progress = document.getElementById('rdv-progress');
+          if (progress){
+            progress.hidden = false;
+            progress.textContent = "Certains fichiers ont été ignorés (type ou taille). Limites : 10 Mo/fichier, ~20 Mo au total.";
+          }
+        }
+      }
+
+      // Clic "Choisir des fichiers"
+      browseBtn?.addEventListener('click', () => input.click());
+
+      // Changement via dialogue
+      input?.addEventListener('change', (e) => validateAndSet(e.target.files));
+
+      // Drag & drop
+      ['dragenter','dragover'].forEach(evt =>
+        dz.addEventListener(evt, e => { e.preventDefault(); e.stopPropagation(); dz.classList.add('is-dragover'); })
+      );
+      ['dragleave','drop'].forEach(evt =>
+        dz.addEventListener(evt, e => { e.preventDefault(); e.stopPropagation(); dz.classList.remove('is-dragover'); })
+      );
+      dz.addEventListener('drop', (e) => {
+        const files = e.dataTransfer?.files || [];
+        validateAndSet(files);
+      });
+
+      // Retirer un fichier (avant envoi)
+      list.addEventListener('click', (e) => {
+        const btn = e.target.closest('.remove');
+        if (!btn) return;
+        const idx = Number(btn.dataset.index);
+        const current = Array.from(input.files);
+        current.splice(idx, 1);
+        const dt = new DataTransfer();
+        current.forEach(f => dt.items.add(f));
+        input.files = dt.files;
+        renderList(input.files);
+      });
+
+    })();
+  </script>
+  <script>
+    (function() {
+      const nav = document.querySelector('.navbar');
+      if (!nav) return;
+      function setOffset() {
+        const h = nav.offsetHeight; // hauteur réelle de la navbar
+        document.documentElement.style.setProperty('--nav-h', h + 'px');
+      }
+      setOffset();
+      window.addEventListener('resize', setOffset);
+    })();
+  </script>
+
+
 
 </body>
 </html>
