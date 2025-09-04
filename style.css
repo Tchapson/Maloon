@@ -37,7 +37,7 @@
     color: white;
     text-decoration: none;
     font-weight: 500;
-    transition: color 0.3s ease;
+    transition: color 0.3s ease
 }
 
 .nav-links a.active {
@@ -61,6 +61,9 @@ html, body {
     display: flex;
     flex-direction: column;
     background-color: #FAFAF8; /* Blanc cassé */
+        font-family: "Poppins", Arial, sans-serif; /* choisis la police que tu veux */
+        font-size: 16px;  /* taille de base du texte */
+        line-height: 1.6; /* lisibilité */
 }
 
 /* ===== FOOTER ===== */
