@@ -13,6 +13,7 @@
     box-sizing: border-box;
     z-index: 1000;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    font-size: 16px;
 }
 
 .logo img {
@@ -61,9 +62,9 @@ html, body {
     display: flex;
     flex-direction: column;
     background-color: #FAFAF8; /* Blanc cassé */
-        font-family: "Poppins", Arial, sans-serif; /* choisis la police que tu veux */
-        font-size: 16px;  /* taille de base du texte */
-        line-height: 1.6; /* lisibilité */
+    font-family: "Poppins", Arial, sans-serif; /* choisis la police que tu veux */
+    font-size: 14px;  /* taille de base du texte */
+    line-height: 1.6; /* lisibilité */
 }
 
 /* ===== FOOTER ===== */
